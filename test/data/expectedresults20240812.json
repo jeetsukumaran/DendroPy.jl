@@ -98,5 +98,168 @@
             "divergence_times": {
                 "all_sorted": [0.3, 0.35, 0.4, 0.45, 0.5],
                 "all_preorder": [0.5, 0.4, 0.4, 0.35, 0.35, 0.3, 0.3],
-                "all_postorder": [0.4, 0.4, 0.35, 0.35, 0.3, 0.3, 0.
+                "all_postorder": [0.4, 0.4, 0.35, 0.35, 0.3, 0.3, 0.5],
+                "internal_sorted": [0.35, 0.4, 0.5],
+                "internal_preorder": [0.5, 0.4, 0.35],
+                "internal_postorder": [0.35, 0.4, 0.5]
+            }
+        },
+        {
+            "newick": "((A:0.3,B:0.3)X1:0.1,(C:0.25,D:0.25)X2:0.15,E:0.4)X0:0.1;",
+            "labels": {
+                "all_preorder": ["X0", "X1", "A", "B", "X2", "C", "D", "E"],
+                "all_postorder": ["A", "B", "X1", "C", "D", "X2", "E", "X0"],
+                "leaves_only": ["A", "B", "C", "D", "E"],
+                "internal_preorder": ["X0", "X1", "X2"],
+                "internal_postorder": ["X1", "X2", "X0"]
+            },
+            "node_ages": {
+                "all_sorted": [0.25, 0.3, 0.4, 0.45],
+                "all_preorder": [0.45, 0.4, 0.3, 0.3, 0.25, 0.25],
+                "all_postorder": [0.3, 0.3, 0.25, 0.25, 0.4, 0.45],
+                "internal_sorted": [0.25, 0.4, 0.45],
+                "internal_preorder": [0.45, 0.4, 0.25],
+                "internal_postorder": [0.25, 0.4, 0.45]
+            },
+            "divergence_times": {
+                "all_sorted": [0.25, 0.3, 0.4, 0.45],
+                "all_preorder": [0.45, 0.4, 0.3, 0.3, 0.25, 0.25],
+                "all_postorder": [0.3, 0.3, 0.25, 0.25, 0.4, 0.45],
+                "internal_sorted": [0.25, 0.4, 0.45],
+                "internal_preorder": [0.45, 0.4, 0.25],
+                "internal_postorder": [0.25, 0.4, 0.45]
+            }
+        },
+        {
+            "newick": "(A:0.5,(B:0.4,C:0.4)X1:0.1,D:0.5,(E:0.3,F:0.3)X2:0.2)X0:0.1;",
+            "labels": {
+                "all_preorder": ["X0", "A", "X1", "B", "C", "D", "X2", "E", "F"],
+                "all_postorder": ["A", "B", "C", "X1", "D", "E", "F", "X2", "X0"],
+                "leaves_only": ["A", "B", "C", "D", "E", "F"],
+                "internal_preorder": ["X0", "X1", "X2"],
+                "internal_postorder": ["X1", "X2", "X0"]
+            },
+            "node_ages": {
+                "all_sorted": [0.3, 0.4, 0.5, 0.6],
+                "all_preorder": [0.6, 0.5, 0.4, 0.4, 0.3, 0.3],
+                "all_postorder": [0.4, 0.4, 0.3, 0.3, 0.5, 0.6],
+                "internal_sorted": [0.3, 0.4, 0.6],
+                "internal_preorder": [0.6, 0.5, 0.4],
+                "internal_postorder": [0.4, 0.3, 0.6]
+            },
+            "divergence_times": {
+                "all_sorted": [0.3, 0.4, 0.5, 0.6],
+                "all_preorder": [0.6, 0.5, 0.4, 0.4, 0.3, 0.3],
+                "all_postorder": [0.4, 0.4, 0.3, 0.3, 0.5, 0.6],
+                "internal_sorted": [0.3, 0.4, 0.6],
+                "internal_preorder": [0.6, 0.5, 0.4],
+                "internal_postorder": [0.4, 0.3, 0.6]
+            }
+        },
+        {
+            "newick": "((A:0.4,B:0.4)X2:0.1,C:0.5,(D:0.3,E:0.3)X1:0.2,(F:0.35,G:0.35)X3:0.15)X0:0.05;",
+            "labels": {
+                "all_preorder": ["X0", "X2", "A", "B", "C", "X1", "D", "E", "X3", "F", "G"],
+                "all_postorder": ["A", "B", "X2", "C", "D", "E", "X1", "F", "G", "X3", "X0"],
+                "leaves_only": ["A", "B", "C", "D", "E", "F", "G"],
+                "internal_preorder": ["X0", "X2", "X1", "X3"],
+                "internal_postorder": ["X2", "X1", "X3", "X0"]
+            },
+            "node_ages": {
+                "all_sorted": [0.3, 0.35, 0.4, 0.5, 0.55],
+                "all_preorder": [0.55, 0.5, 0.4, 0.4, 0.35, 0.35, 0.3, 0.3],
+                "all_postorder": [0.4, 0.4, 0.35, 0.35, 0.3, 0.3, 0.5, 0.55],
+                "internal_sorted": [0.3, 0.4, 0.5, 0.55],
+                "internal_preorder": [0.55, 0.5, 0.4, 0.35],
+                "internal_postorder": [0.35, 0.4, 0.5, 0.55]
+            },
+            "divergence_times": {
+                "all_sorted": [0.3, 0.35, 0.4, 0.5, 0.55],
+                "all_preorder": [0.55, 0.5, 0.4, 0.4, 0.35, 0.35, 0.3, 0.3],
+                "all_postorder": [0.4, 0.4, 0.35, 0.35, 0.3, 0.3, 0.5, 0.55],
+                "internal_sorted": [0.3, 0.4, 0.5, 0.55],
+                "internal_preorder": [0.55, 0.5, 0.4, 0.35],
+                "internal_postorder": [0.35, 0.4, 0.5, 0.55]
+            }
+        },
+        {
+            "newick": "(A:0.3,(B:0.2,C:0.2)X2:0.1,(D:0.15,E:0.15,F:0.15)X1:0.05)X0:0.2;",
+            "labels": {
+                "all_preorder": ["X0", "A", "X2", "B", "C", "X1", "D", "E", "F"],
+                "all_postorder": ["A", "B", "C", "X2", "D", "E", "F", "X1", "X0"],
+                "leaves_only": ["A", "B", "C", "D", "E", "F"],
+                "internal_preorder": ["X0", "X2", "X1"],
+                "internal_postorder": ["X2", "X1", "X0"]
+            },
+            "node_ages": {
+                "all_sorted": [0.15, 0.2, 0.3, 0.35],
+                "all_preorder": [0.35, 0.3, 0.2, 0.2, 0.15, 0.15, 0.15],
+                "all_postorder": [0.2, 0.2, 0.15, 0.15, 0.15, 0.3, 0.35],
+                "internal_sorted": [0.15, 0.2, 0.3, 0.35],
+                "internal_preorder": [0.35, 0.2, 0.15],
+                "internal_postorder": [0.15, 0.2, 0.3, 0.35]
+            },
+            "divergence_times": {
+                "all_sorted": [0.15, 0.2, 0.3, 0.35],
+                "all_preorder": [0.35, 0.3, 0.2, 0.2, 0.15, 0.15, 0.15],
+                "all_postorder": [0.2, 0.2, 0.15, 0.15, 0.15, 0.3, 0.35],
+                "internal_sorted": [0.15, 0.2, 0.3, 0.35],
+                "internal_preorder": [0.35, 0.2, 0.15],
+                "internal_postorder": [0.15, 0.2, 0.3, 0.35]
+            }
+        },
+        {
+            "newick": "((A:0.25,B:0.25)X2:0.1,(C:0.2,D:0.2)X1:0.15,(E:0.15,F:0.15)X3:0.2,G:0.35)X0:0.05;",
+            "labels": {
+                "all_preorder": ["X0", "X2", "A", "B", "X1", "C", "D", "X3", "E", "F", "G"],
+                "all_postorder": ["A", "B", "X2", "C", "D", "X1", "E", "F", "X3", "G", "X0"],
+                "leaves_only": ["A", "B", "C", "D", "E", "F", "G"],
+                "internal_preorder": ["X0", "X2", "X1", "X3"],
+                "internal_postorder": ["X2", "X1", "X3", "X0"]
+            },
+            "node_ages": {
+                "all_sorted": [0.15, 0.2, 0.25, 0.3, 0.35],
+                "all_preorder": [0.35, 0.25, 0.25, 0.2, 0.2, 0.15, 0.15],
+                "all_postorder": [0.25, 0.25, 0.2, 0.2, 0.15, 0.15, 0.3, 0.35],
+                "internal_sorted": [0.15, 0.2, 0.3, 0.35],
+                "internal_preorder": [0.35, 0.2, 0.15],
+                "internal_postorder": [0.15, 0.2, 0.3, 0.35]
+            },
+            "divergence_times": {
+                "all_sorted": [0.15, 0.2, 0.25, 0.3, 0.35],
+                "all_preorder": [0.35, 0.25, 0.25, 0.2, 0.2, 0.15, 0.15],
+                "all_postorder": [0.25, 0.25, 0.2, 0.2, 0.15, 0.15, 0.3, 0.35],
+                "internal_sorted": [0.15, 0.2, 0.3, 0.35],
+                "internal_preorder": [0.35, 0.2, 0.15],
+                "internal_postorder": [0.15, 0.2, 0.3, 0.35]
+            }
+        },
+        {
+            "newick": "(A:0.3,(B:0.25,(C:0.2,D:0.2)X2:0.05)X1:0.05,E:0.4,(F:0.35,G:0.35)X3:0.05)X0:0.05;",
+            "labels": {
+                "all_preorder": ["X0", "A", "X1", "B", "X2", "C", "D", "E", "X3", "F", "G"],
+                "all_postorder": ["A", "B", "C", "D", "X2", "X1", "E", "F", "G", "X3", "X0"],
+                "leaves_only": ["A", "B", "C", "D", "E", "F", "G"],
+                "internal_preorder": ["X0", "X1", "X2", "X3"],
+                "internal_postorder": ["X2", "X1", "X3", "X0"]
+            },
+            "node_ages": {
+                "all_sorted": [0.2, 0.25, 0.3, 0.35, 0.4],
+                "all_preorder": [0.4, 0.35, 0.35, 0.3, 0.25, 0.25, 0.2, 0.2],
+                "all_postorder": [0.35, 0.35, 0.25, 0.25, 0.2, 0.2, 0.3, 0.4],
+                "internal_sorted": [0.25, 0.35, 0.4],
+                "internal_preorder": [0.4, 0.35, 0.25],
+                "internal_postorder": [0.25, 0.35, 0.4]
+            },
+            "divergence_times": {
+                "all_sorted": [0.2, 0.25, 0.3, 0.35, 0.4],
+                "all_preorder": [0.4, 0.35, 0.35, 0.3, 0.25, 0.25, 0.2, 0.2],
+                "all_postorder": [0.35, 0.35, 0.25, 0.25, 0.2, 0.2, 0.3, 0.4],
+                "internal_sorted": [0.25, 0.35, 0.4],
+                "internal_preorder": [0.4, 0.35, 0.25],
+                "internal_postorder": [0.25, 0.35, 0.4]
+            }
+        }
+    ]
+}
 
