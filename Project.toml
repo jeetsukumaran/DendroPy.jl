@@ -1,0 +1,13 @@
+name = "DendroPy"
+uuid = "54152803-fac3-4411-96b7-96525d0c3ab4"
+authors = ["Jeet Sukumaran <jeetsukumaran@gmail.com>"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1.8"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
