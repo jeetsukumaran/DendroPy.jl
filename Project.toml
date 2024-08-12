@@ -3,6 +3,9 @@ uuid = "54152803-fac3-4411-96b7-96525d0c3ab4"
 authors = ["Jeet Sukumaran <jeetsukumaran@gmail.com>"]
 version = "1.0.0-DEV"
 
+[deps]
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+
 [compat]
 julia = "1.8"
 
