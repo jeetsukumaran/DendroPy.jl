@@ -35,6 +35,7 @@ end
     end
     @test length(tree_keys) == length(trees_data) == n_trees_visited
     @test all(haskey.(Ref(application_count), tree_keys))
+    @test sort(collect(keys(application_count))) == sort(tree_keys)
 end
 
 # @testset "DendroPy.jl: single tree parsing" begin
