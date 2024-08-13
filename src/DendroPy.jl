@@ -1,9 +1,11 @@
 module DendroPy
 
 export dendropy,
-       divergence_times_from_dendropy_tree
+    divergence_times_from_dendropy_tree
 
 import PyCall
+
+include("types.jl")
 
 const dendropy = PyCall.PyNULL()
 
@@ -30,5 +32,19 @@ function divergence_times_from_dendropy_tree(
     end
     return values(nd_ages)
 end
+
+function read_trees_file(filepath::AbstractString, format::Symbol)
+    return [DendroPy.divergence_times_from_dendropy_tree(tree) for tree in dendropy.TreeList.get(path=filepath, schema=String(format))]
+end
+
+function read_trees(trees_str::AbstractString, format::Symbol)
+    return [DendroPy.divergence_times_from_dendropy_tree(tree) for tree in dendropy.TreeList.get(data=trees_str, schema=String(format))]
+end
+
+# function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
+# end
+
+# function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
+# end
 
 end

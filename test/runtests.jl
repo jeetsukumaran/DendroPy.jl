@@ -7,10 +7,11 @@ function get_test_data()
     return JSON.parsefile(source_path)
 end
 
-@testset "DendroPy.jl" begin
+@testset "DendroPy.jl: single tree parsing" begin
     # Write your tests here.
     test_data = get_test_data()
     foreach(test_data["trees"]) do tree_data
-        @info tree_data["newick"]
+        tree_str = tree_data["newick"]
+        dendropy_tree = dendropy.Tree.get(data=tree_str, schema=:newick, rooting="force-rooted")
     end
 end
