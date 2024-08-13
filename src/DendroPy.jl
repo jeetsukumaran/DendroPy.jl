@@ -50,13 +50,9 @@ function enumerate_map_trees(transform_fn::Function, source::AbstractString, sou
     return [transform_fn(tree_idx, tree) for (tree_idx, tree) in enumerate(trees)]
 end
 
-# function map_trees(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
-#     return enumerate_map_trees( (tree_idx, tree) -> transform_fn(tree),
-#                                source=source,
-#                                source_type=source_type,
-#                                format=format=format,
-#                             )
-# end
+function map_trees(transform_fn::Function, args...)
+    return enumerate_map_trees( (tree_idx, tree) -> tree, args... )
+end
 
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)

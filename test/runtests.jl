@@ -24,28 +24,27 @@ function get_test_data()
 end
 
 # Ensure that enumerate_map_trees visits each tree in correct order once and exactly once
-function test_mapping_over_collection(apply_fn, iter_fn)
+function test_mapping_over_collection(iter_fn)
     test_data = get_test_data()
     test_trees_data = test_data[:trees_data]
     test_newick_str = join(test_data[:newick_strings], "\n")
     visited_trees = Dict{Any, Integer}()
     iter_fn( (args...) -> begin
-              end, test_newick_str, "string", :newick)
+        tree = args[1]
+        if haskey(visited_trees, tree)
+            visited_trees[tree] += 1
+        else
+            visited_trees[tree] = 1
+        end
+    end, test_newick_str, "string", :newick)
     @test length(visited_trees) == length(test_trees_data)
     @test all(values(visited_trees) .== 1)
 end
 
 @testset "DendroPy.jl: mappings over collections of trees" begin
-    test_mapping_over_collection(
-            (tree_idx, tree) -> begin
-                if haskey(visited_trees, tree)
-                    visited_trees[tree] += 1
-                else
-                    visited_trees[tree] = 1
-                end
-            end,
-            DendroPy.enumerate_map_trees
-    )
+    test_mapping_over_collection(DendroPy.enumerate_map_trees)
+    # test_mapping_over_collection(DendroPy.map_trees)
+
     # test_mapping_over_collection(
     #         (tree) -> begin
     #             if haskey(visited_trees, tree)
