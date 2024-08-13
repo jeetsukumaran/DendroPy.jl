@@ -52,6 +52,7 @@ function check_mapping_over_tree()
         postorder_labels = DendroPy.postorder_map( (nd) -> nd.data.taxon === nothing ? nd.data.label : nd.data.taxon.label, tree )
         preorder_labels = DendroPy.preorder_map( (nd) -> nd.data.taxon === nothing ? nd.data.label : nd.data.taxon.label, tree )
         @test postorder_labels == test_tree_data["labels"]["all_postorder"]
+        @info test_tree_data["newick"]
         @test preorder_labels == test_tree_data["labels"]["all_preorder"]
     end, test_newick_str, "string", :newick)
 end
