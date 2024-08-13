@@ -43,6 +43,7 @@ end
 
 @testset "DendroPy.jl: mappings over collections of trees" begin
     check_mapping_over_collection(DendroPy.enumerate_map_trees)
+    check_mapping_over_collection(DendroPy.map_trees)
     # test_mapping_over_collection(DendroPy.map_trees)
 
     # test_mapping_over_collection(

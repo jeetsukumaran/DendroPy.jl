@@ -35,9 +35,6 @@ end
 
 function enumerate_map_trees(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
     schema = String(format)
-    if transform_fn === nothing
-        transform_fn = (tree) -> tree
-    end
     trees = if source_type == "filepath"
         dendropy.TreeList.get(path=source, schema=schema)
     elseif source_type == "file"
@@ -51,7 +48,7 @@ function enumerate_map_trees(transform_fn::Function, source::AbstractString, sou
 end
 
 function map_trees(transform_fn::Function, args...)
-    return enumerate_map_trees( (tree_idx, tree) -> tree, args... )
+    return enumerate_map_trees( (tree_idx, tree) -> transform_fn(tree), args... )
 end
 
 
