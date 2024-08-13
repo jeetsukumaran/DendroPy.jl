@@ -33,7 +33,7 @@ function divergence_times_from_dendropy_tree(
     return values(nd_ages)
 end
 
-function map_trees(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
+function enumerate_map_trees(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
     schema = String(format)
     if transform_fn === nothing
         transform_fn = (tree) -> tree
@@ -47,7 +47,7 @@ function map_trees(transform_fn::Function, source::AbstractString, source_type::
     else
         throw(ArgumentError("Invalid source_type: $source_type. Must be one of 'filepath', 'file', or 'string'."))
     end
-    return [transform_fn(tree) for tree in trees]
+    return [transform_fn(tree_idx, tree) for (tree_idx, tree) in enumerate(trees)]
 end
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
