@@ -15,18 +15,18 @@ function get_test_data()
     return d
 end
 
-@testset "DendroPy.jl: map_trees" begin
+@testset "DendroPy.jl: map_trees: single" begin
     # Write your tests here.
     test_data = get_test_data()
-    tree_keys::Vector{Symbol} = []
-    application_count = Dict{Symbol, Integer}()
     trees_data = test_data["trees"]
+    tree_keys::Vector{Symbol} = []
+    tree_strings::Vector{String} = []
+    application_count = Dict{Symbol, Integer}()
     n_trees_visited = 0
     foreach(enumerate(trees_data)) do (tree_idx, tree_data)
         n_trees_visited += 1
         tree_str = tree_data["newick"]
-        # test_apply_fn = (tree) -> application_count[tree_data["id"]] = get(application_count, tree_data["id"], 0) + 1
-        # DendroPy.map_trees(test_apply_fn, tree_str, "string", :newick)
+        push!(tree_strings, tree_str)
         DendroPy.map_trees(tree_str, "string", :newick) do tree
             tree_key = Symbol(tree_data["id"])
             application_count[tree_key] = get(application_count, tree_key, 0) + 1
@@ -36,17 +36,11 @@ end
     @test length(tree_keys) == length(trees_data) == n_trees_visited
     @test all(haskey.(Ref(application_count), tree_keys))
     @test sort(collect(keys(application_count))) == sort(tree_keys)
+
+    # Some experiments in syntax
+    @test all((==).(values(application_count), 1))
+    @test all(x -> x == 1, values(application_count))
+    @test all(x == 1 for x in values(application_count))
+
 end
 
-# @testset "DendroPy.jl: single tree parsing" begin
-#     # Write your tests here.
-#     test_data = get_test_data()
-#     foreach(test_data["trees"]) do tree_data
-#         tree_str = tree_data["newick"]
-#         # py_tree = dendropy.Tree.get(data=tree_str, schema=:newick, rooting="force-rooted")
-#         # j_trees = (fn) -> DendroPy.map_trees(fn, tree_str, "string", :newick)
-#         DendroPy.map_trees(tree_str, "string", :newick) do j_tree
-#             return j_tree.resolve_node_ages()
-#         end
-#     end
-# end
