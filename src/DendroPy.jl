@@ -33,12 +33,21 @@ function divergence_times_from_dendropy_tree(
     return values(nd_ages)
 end
 
-function read_trees_file(filepath::AbstractString, format::Symbol)
-    return [DendroPy.divergence_times_from_dendropy_tree(tree) for tree in dendropy.TreeList.get(path=filepath, schema=String(format))]
-end
-
-function read_trees(trees_str::AbstractString, format::Symbol)
-    return [DendroPy.divergence_times_from_dendropy_tree(tree) for tree in dendropy.TreeList.get(data=trees_str, schema=String(format))]
+function map_trees(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
+    schema = String(format)
+    if transform_fn === nothing
+        transform_fn = (tree) -> tree
+    end
+    trees = if source_type == "filepath"
+        dendropy.TreeList.get(path=source, schema=schema)
+    elseif source_type == "file"
+        dendropy.TreeList.get(file=source, schema=schema)
+    elseif source_type == "string"
+        dendropy.TreeList.get(data=source, schema=schema)
+    else
+        throw(ArgumentError("Invalid source_type: $source_type. Must be one of 'filepath', 'file', or 'string'."))
+    end
+    return (transform_fn(tree) for tree in trees)
 end
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
