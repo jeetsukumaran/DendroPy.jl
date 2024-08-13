@@ -47,7 +47,7 @@ function map_trees(transform_fn::Function, source::AbstractString, source_type::
     else
         throw(ArgumentError("Invalid source_type: $source_type. Must be one of 'filepath', 'file', or 'string'."))
     end
-    return (transform_fn(tree) for tree in trees)
+    return [transform_fn(tree) for tree in trees]
 end
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
