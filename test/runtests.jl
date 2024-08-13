@@ -47,8 +47,11 @@ function check_mapping_over_tree()
     test_newick_str = join(test_data[:newick_strings], "\n")
     DendroPy.enumerate_map_trees( (tree_idx, tree) -> begin
         test_tree_data = test_trees_data[tree_idx]
-        abstract_tree = DendroPy.abstract_tree(tree)
-        println(abstract_tree)
+        postorder_nodes = DendroPy.postorder_iter(tree)
+        preorder_nodes = DendroPy.preorder_iter(tree)
+        labels = DendroPy.postorder_map( (nd) -> nd.data.taxon === nothing ? nd.data.label : nd.data.taxon.label, tree )
+        @test labels == test_tree_data["labels"]["all_postorder"]
+        println(labels)
     end, test_newick_str, "string", :newick)
 end
 
