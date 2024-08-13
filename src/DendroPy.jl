@@ -62,11 +62,11 @@ function abstract_tree(start_node::PyCall.PyObject)
     return abstract_node
 end
 
-function postorder_iter(start_node::PyCall.PyObject)
-    return postorder_iter(abstract_tree(start_node))
-end
 function postorder_iter(start_node::Node)
     return AbstractTrees.PostOrderDFS(start_node)
+end
+function postorder_iter(start_node::PyCall.PyObject)
+    return postorder_iter(abstract_tree(start_node))
 end
 function postorder_map(fn::Function, start_node::PyCall.PyObject)
     map(postorder_iter(abstract_tree(start_node))) do node
@@ -74,11 +74,16 @@ function postorder_map(fn::Function, start_node::PyCall.PyObject)
     end
 end
 
+function preorder_iter(start_node::Node)
+    return AbstractTrees.PreOrderDFS(start_node)
+end
 function preorder_iter(start_node::PyCall.PyObject)
     return preorder_iter(abstract_tree(start_node))
 end
-function preorder_iter(start_node::Node)
-    return AbstractTrees.PostOrderDFS(start_node)
+function preorder_map(fn::Function, start_node::PyCall.PyObject)
+    map(preorder_iter(abstract_tree(start_node))) do node
+        return fn(node)
+    end
 end
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
