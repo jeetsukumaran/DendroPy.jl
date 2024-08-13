@@ -51,6 +51,16 @@ function map_trees(transform_fn::Function, args...)
     return enumerate_map_trees( (tree_idx, tree) -> transform_fn(tree), args... )
 end
 
+function abstract_tree(start_node::PyCall.PyObject)
+    if haskey(start_node, :seed_node)
+        start_node = start_node.seed_node
+    end
+    abstract_node = Node(
+        start_node,
+        Node{typeof(start_node)}[abstract_tree(child_node) for child_node in start_node.child_nodes()],
+    )
+    return abstract_node
+end
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
 # end
