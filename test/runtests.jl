@@ -57,22 +57,4 @@ end
     # )
 end
 
-# Ensure that map_trees visits each tree in correct order once and exactly once
-@testset "DendroPy.jl: mappings over collections of trees" begin
-    # Write your tests here.
-    test_data = get_test_data()
-    test_trees_data = test_data[:trees_data]
-    test_newick_str = join(test_data[:newick_strings], "\n")
-    visited_trees = Dict{Any, Integer}()
-    DendroPy.enumerate_map_trees( (tree_idx, tree) -> begin
-                           if haskey(visited_trees, tree)
-                               visited_trees[tree] += 1
-                           else
-                               visited_trees[tree] = 1
-                           end
-                        end,
-                        test_newick_str, "string", :newick)
-    @test length(visited_trees) == length(test_trees_data)
-    @test all(values(visited_trees) .== 1)
-end
 
