@@ -49,7 +49,9 @@ def extract_tree_features(tree):
     tree_d["features"] = {
         "length": sum(edge.length if edge.length else 0.0 for edge in tree.postorder_edge_iter()),
         "n_leaves": sum(1 for nd in tree.leaf_node_iter()),
-        "n_internal": sum(1 for nd in tree.internal_nodes())
+        "n_internal": sum(1 for nd in tree.internal_nodes()),
+        "coalescence_ages": sorted([nd.age for nd in tree.internal_nodes()]),
+        "divergence_times": sorted([nd.depth for nd in tree.internal_nodes()]),
     }
     return tree_d
 
