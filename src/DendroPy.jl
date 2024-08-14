@@ -77,8 +77,8 @@ end
 function preorder_iter(start_node::Node)
     return AbstractTrees.PreOrderDFS(start_node)
 end
-function preorder_iter(start_node::PyCall.PyObject)
-    return preorder_iter(abstract_tree(start_node))
+function preorder_iter(tree::PyCall.PyObject)
+    return preorder_iter(abstract_tree(tree))
 end
 function preorder_map(fn::Function, start_node::PyCall.PyObject)
     map(preorder_iter(abstract_tree(start_node))) do node
@@ -88,6 +88,9 @@ end
 
 function edge_length(node::Node)
     return node.data.edge.length
+end
+function label(node::Node)
+    return node.data.taxon === nothing ? node.data.label : node.data.taxon.label
 end
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)

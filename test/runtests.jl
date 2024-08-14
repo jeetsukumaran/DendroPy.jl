@@ -38,6 +38,7 @@ function check_mapping_over_tree()
         test_tree_data = test_trees_data[tree_idx]
         for (fn_key, apply_fn) in (
             ["edge_lengths", DendroPy.edge_length,],
+            ["labels", DendroPy.label,],
         )
             for (traversal_key, iter_fn) in (
                 # ["postorder", DendroPy.postorder_map, test_tree_data[tree_idx]["nodes"][fn_key]["postorder"]],
