@@ -92,6 +92,10 @@ end
 function label(node::Node)
     return node.data.taxon === nothing ? node.data.label : node.data.taxon.label
 end
+function age(node::Node)
+    return node.data.age
+end
+
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
 # end
