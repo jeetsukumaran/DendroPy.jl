@@ -86,7 +86,6 @@ function preorder_map(fn::Function, start_node::PyCall.PyObject)
     end
 end
 
-
 function edge_length(node::Node)
     return node.data.edge.length
 end

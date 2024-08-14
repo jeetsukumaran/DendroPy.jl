@@ -39,11 +39,13 @@ function check_mapping_over_tree()
         for (fn_key, apply_fn) in (
             ["edge_lengths", DendroPy.edge_length,],
         )
-            for (traversal_key, iter_fn, expected) in (
+            for (traversal_key, iter_fn) in (
                 # ["postorder", DendroPy.postorder_map, test_tree_data[tree_idx]["nodes"][fn_key]["postorder"]],
-                ["postorder", DendroPy.postorder_map, test_tree_data["nodes"][fn_key]["postorder"]],
+                ["postorder", DendroPy.postorder_map],
+                ["preorder", DendroPy.preorder_map],
             )
                 result = iter_fn(apply_fn, tree)
+                expected = test_tree_data["nodes"][fn_key][traversal_key]
                 @test result == expected
             end
         end
