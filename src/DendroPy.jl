@@ -33,7 +33,7 @@ function divergence_times_from_dendropy_tree(
     return values(nd_ages)
 end
 
-function enumerate_map_trees(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
+function enumerate_map_tree_source(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
     schema = String(format)
     trees = if source_type == "filepath"
         dendropy.TreeList.get(path=source, schema=schema, rooting="force-rooted")
@@ -47,8 +47,8 @@ function enumerate_map_trees(transform_fn::Function, source::AbstractString, sou
     return [transform_fn(tree_idx, tree) for (tree_idx, tree) in enumerate(trees)]
 end
 
-function map_trees(transform_fn::Function, args...)
-    return enumerate_map_trees( (tree_idx, tree) -> transform_fn(tree), args... )
+function map_tree_source(transform_fn::Function, args...)
+    return enumerate_map_tree_source( (tree_idx, tree) -> transform_fn(tree), args... )
 end
 
 function abstract_tree(start_node::PyCall.PyObject)
@@ -65,11 +65,11 @@ end
 function postorder_iter(start_node::Node)
     return AbstractTrees.PostOrderDFS(start_node)
 end
-function postorder_iter(start_node::PyCall.PyObject)
-    return postorder_iter(abstract_tree(start_node))
+function postorder_iter(tree::PyCall.PyObject)
+    return postorder_iter(abstract_tree(tree))
 end
-function postorder_map(fn::Function, start_node::PyCall.PyObject)
-    map(postorder_iter(abstract_tree(start_node))) do node
+function postorder_map(fn::Function, tree::PyCall.PyObject)
+    map(postorder_iter(abstract_tree(tree))) do node
         return fn(node)
     end
 end
@@ -80,8 +80,8 @@ end
 function preorder_iter(tree::PyCall.PyObject)
     return preorder_iter(abstract_tree(tree))
 end
-function preorder_map(fn::Function, start_node::PyCall.PyObject)
-    map(preorder_iter(abstract_tree(start_node))) do node
+function preorder_map(fn::Function, tree::PyCall.PyObject)
+    map(preorder_iter(abstract_tree(tree))) do node
         return fn(node)
     end
 end
@@ -95,6 +95,13 @@ end
 function age(node::Node)
     return node.data.age
 end
+
+function coalescence_ages(tree::PyCall.PyObject)
+end
+
+function divergence_times(tree::PyCall.PyObject)
+end
+
 
 
 # function abstract_trees_from_file(filepath::AbstractString, format::Symbol)

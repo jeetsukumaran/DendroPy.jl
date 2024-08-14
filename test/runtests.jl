@@ -34,7 +34,7 @@ function check_mapping_over_tree()
     test_d = get_test_data()
     test_trees_data = test_d["data"]
     test_newick_str = test_d["definitions"]["newick"]
-    DendroPy.enumerate_map_trees( (tree_idx, tree) -> begin
+    DendroPy.enumerate_map_tree_source( (tree_idx, tree) -> begin
         test_tree_data = test_trees_data[tree_idx]
         for (fn_key, apply_fn) in (
             ["edge_lengths", DendroPy.edge_length,],
@@ -46,21 +46,42 @@ function check_mapping_over_tree()
                 ["postorder", DendroPy.postorder_map],
                 ["preorder", DendroPy.preorder_map],
             )
-                result = iter_fn(apply_fn, tree)
                 expected = test_tree_data["nodes"][fn_key][traversal_key]
+                result = iter_fn(apply_fn, tree)
                 @test result == expected
             end
         end
     end, test_newick_str, "string", :newick)
 end
 
+function check_tree_features()
+    test_d = get_test_data()
+    test_trees_data = test_d["data"]
+    test_newick_str = test_d["definitions"]["newick"]
+    DendroPy.enumerate_map_tree_source( (tree_idx, tree) -> begin
+        test_tree_data = test_trees_data[tree_idx]
+        for (feature_key, feature_fn,) in (
+            ["coalescence_ages", DendroPy.coalescence_ages, ],
+            ["divergence_times", DendroPy.divergence_times, ],
+        )
+            expected = test_tree_data["features"][feature_key]
+            result = feature_fn(tree)
+            @test result == expected
+        end
+    end, test_newick_str, "string", :newick)
+end
+
 @testset "DendroPy.jl: mappings over collections of trees" begin
-    check_mapping_over_collection(DendroPy.enumerate_map_trees)
-    check_mapping_over_collection(DendroPy.map_trees)
+    check_mapping_over_collection(DendroPy.enumerate_map_tree_source)
+    check_mapping_over_collection(DendroPy.map_tree_source)
 end
 
 @testset "DendroPy.jl: mappings over tree" begin
     check_mapping_over_tree()
+end
+
+@testset "DendroPy.jl: tree feature extraction" begin
+    check_tree_features()
 end
 
 
