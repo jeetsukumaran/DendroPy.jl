@@ -37,13 +37,14 @@ function check_mapping_over_tree()
     DendroPy.enumerate_map_trees( (tree_idx, tree) -> begin
         test_tree_data = test_trees_data[tree_idx]
         for (fn_key, apply_fn) in (
-            ["keys", (nd) -> nd.data.edge.length,],
+            ["edge_lengths", DendroPy.edge_length,],
         )
-            for (traversal_key, iter_fn, expected_value) in (
+            for (traversal_key, iter_fn, expected) in (
                 # ["postorder", DendroPy.postorder_map, test_tree_data[tree_idx]["nodes"][fn_key]["postorder"]],
-                ["postorder", DendroPy.postorder_map, "x"],
+                ["postorder", DendroPy.postorder_map, test_tree_data["nodes"][fn_key]["postorder"]],
             )
                 result = iter_fn(apply_fn, tree)
+                @test result == expected
             end
         end
     end, test_newick_str, "string", :newick)
