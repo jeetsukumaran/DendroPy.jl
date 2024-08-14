@@ -26,6 +26,10 @@ def extract_tree_features(tree):
     tree_d = {}
     tree_d["key"] = tree.key
     tree_d["nodes"] = {}
+    tree_d["definitions"] = {
+        "nexus": tree.as_string("nexus"),
+        "newick": tree.as_string("newick"),
+    }
     for feature_class in (
         ( "keys", lambda nd: nd.key, ),
         ( "edge_lengths", lambda nd: nd.edge.length if nd.edge.length else 0.0, ),
@@ -50,8 +54,8 @@ def extract_tree_features(tree):
     return tree_d
 
 def export_tree_features(out, d):
-    print(d)
-    # json.dump(d, out)
+    out.write(json.dumps(d, indent=4))
+    out.write("\n")
 
 def generate_test_data_trees(
     out,
@@ -60,15 +64,23 @@ def generate_test_data_trees(
     rng = random.Random(random_seed)
     tree_idx = 1
     d = {}
-    d["trees"] = []
+    d["data"] = []
+    trees = []
     for leaf_set_size in range(2, 24):
         leaf_labels = [f"T{idx:03d}" for idx in range(leaf_set_size)]
         tns = dendropy.TaxonNamespace(leaf_labels)
         tree = dendropy.simulate.pure_kingman_tree(tns)
         tree = add_tree_features_(tree, tree_idx)
         features = extract_tree_features(tree)
-        d["trees"].append(features)
+        d["data"].append(features)
+        trees.append(tree)
         tree_idx += 1
+    tree_list = dendropy.TreeList()
+    for tree in trees:
+        tree_list.append(tree)
+    d["definitions"] = {}
+    d["definitions"]["nexus"] = tree_list.as_string("nexus")
+    d["definitions"]["newick"] = tree_list.as_string("newick")
     json.dump(d, out)
 
 generate_test_data_trees(sys.stdout)
