@@ -97,9 +97,13 @@ function age(node::Node)
 end
 
 function coalescence_ages(tree::PyCall.PyObject)
+    tree.resolve_node_ages()
+    return sort([nd.age for nd in tree.internal_nodes()])
 end
 
 function divergence_times(tree::PyCall.PyObject)
+    tree.resolve_node_depths()
+    return sort([nd.depth for nd in tree.internal_nodes()])
 end
 
 
