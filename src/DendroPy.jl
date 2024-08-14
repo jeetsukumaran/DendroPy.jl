@@ -36,11 +36,11 @@ end
 function enumerate_map_trees(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
     schema = String(format)
     trees = if source_type == "filepath"
-        dendropy.TreeList.get(path=source, schema=schema)
+        dendropy.TreeList.get(path=source, schema=schema, rooting="force-rooted")
     elseif source_type == "file"
-        dendropy.TreeList.get(file=source, schema=schema)
+        dendropy.TreeList.get(file=source, schema=schema, rooting="force-rooted")
     elseif source_type == "string"
-        dendropy.TreeList.get(data=source, schema=schema)
+        dendropy.TreeList.get(data=source, schema=schema, rooting="force-rooted")
     else
         throw(ArgumentError("Invalid source_type: $source_type. Must be one of 'filepath', 'file', or 'string'."))
     end

@@ -1,6 +1,7 @@
 using AbstractTrees
+using PyCall
 
-struct Node{T}
+struct Node{T<:PyCall.PyObject}
   data::T
   children::Vector{Node{T}}
 end
