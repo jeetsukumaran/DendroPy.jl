@@ -12,14 +12,14 @@ export
     install_dendropy
 
 import PyCall
-import Pkg
+import Logging
 
 include("types.jl")
 
 const dendropy = PyCall.PyNULL()
 
 function install_dendropy()
-    println("Attempting to install DendroPy Python package from the development-main branch.")
+    @info("Attempting to install DendroPy Python package from the development-main branch.")
     # Use Conda.jl or the user's existing Python environment to install DendroPy
     run(`pip install git+https://github.com/jeetsukumaran/DendroPy@development-main`)
     copy!(dendropy, PyCall.pyimport("dendropy"))
@@ -30,7 +30,7 @@ function __init__()
         copy!(dendropy, PyCall.pyimport("dendropy"))
     catch e
         if isa(e, PyCall.PyError)
-            println("DendroPy package not found. Installing...")
+            @info "DendroPy package not found. Installing..."
             install_dendropy()
         else
             rethrow(e)
