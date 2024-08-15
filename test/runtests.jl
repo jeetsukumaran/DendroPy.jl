@@ -48,8 +48,8 @@ function check_mapping_over_tree()
             )
                 expected = test_tree_data["nodes"][fn_key][traversal_key]
                 result = iter_fn(apply_fn, tree)
-                @info result
-                @info typeof(result)
+                # @info result
+                # @info typeof(result)
                 @test result == expected
             end
         end
@@ -68,6 +68,7 @@ function check_tree_features()
         )
             expected = test_tree_data["features"][feature_key]
             result = feature_fn(tree)
+            @test length(result) == length(expected)
             @test result == expected
         end
     end, test_newick_str, "string", :newick)

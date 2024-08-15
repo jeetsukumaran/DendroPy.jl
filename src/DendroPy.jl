@@ -128,15 +128,19 @@ end
 function depth(node::TreeNode)
     return PythonCall.pyconvert(Float64, node.data.depth, 0)
 end
-
-function coalescence_ages(node::TreeNode)
-    node.tree.resolve_node_ages()
-    return sort([age(node) for nd in node.data.postorder_internal_node_iter()])
+function is_internal(node::TreeNode)
+    return PythonCall.pyconvert(Bool, node.data.is_internal())
 end
 
-function divergence_times(node::TreeNode)
-    node.tree.resolve_node_depths()
-    return sort([depth(node) for nd in node.data.postorder_internal_node_iter()])
+
+function coalescence_ages(tree_node::TreeNode)
+    tree_node.tree.resolve_node_ages()
+    return sort(map(age, filter(is_internal, collect(preorder_iter(tree_node)))))
+end
+
+function divergence_times(tree_node::TreeNode)
+    tree_node.tree.resolve_node_depths()
+    return sort(map(depth, filter(is_internal, collect(preorder_iter(tree_node)))))
 end
 
 end
