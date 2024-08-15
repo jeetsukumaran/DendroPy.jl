@@ -80,46 +80,47 @@ function map_tree_source(transform_fn::Function, args...)
     return enumerate_map_tree_source( (tree_idx, tree) -> transform_fn(tree), args... )
 end
 
-function abstract_tree(start_node::WrappedPythonType)
-    # # if haskey(start_node, :seed_node) # PyCall
-    if hasproperty(start_node, "seed_node")
-        start_node = start_node.seed_node
-    end
-    abstract_node = Node(
-        start_node,
-        Node{typeof(start_node)}[abstract_tree(child_node) for child_node in start_node.child_nodes()],
+function abstract_tree(tree::WrappedPythonType)
+    return abstract_tree(tree, tree.seed_node)
+end
+
+function abstract_tree(tree::WrappedPythonType, node::WrappedPythonType)
+    abstract_node = TreeNode(
+        tree,
+        node,
+        TreeNode{typeof(tree)}[abstract_tree(tree, child_node) for child_node in node.child_nodes()],
     )
     return abstract_node
 end
 
-function postorder_iter(start_node::Node)
+function postorder_iter(start_node::TreeNode)
     return AbstractTrees.PostOrderDFS(start_node)
 end
 function postorder_iter(tree::WrappedPythonType)
     return postorder_iter(abstract_tree(tree))
 end
-function postorder_map(fn::Function, start_node::Node)
+function postorder_map(fn::Function, start_node::TreeNode)
     map(postorder_iter(start_node)) do node
         return fn(node)
     end
 end
 
-function preorder_iter(start_node::Node)
+function preorder_iter(start_node::TreeNode)
     return AbstractTrees.PreOrderDFS(start_node)
 end
 function preorder_iter(tree::WrappedPythonType)
     return preorder_iter(abstract_tree(tree))
 end
-function preorder_map(fn::Function, start_node::Node)
+function preorder_map(fn::Function, start_node::TreeNode)
     map(preorder_iter(start_node)) do node
         return fn(node)
     end
 end
 
-function edge_length(node::Node)
+function edge_length(node::TreeNode)
     return PythonCall.pyconvert(Float64, node.data.edge.length, 0)
 end
-function label(node::Node)
+function label(node::TreeNode)
     if pytruth(node.data.taxon)
         label = node.data.taxon.label
     else
@@ -127,19 +128,19 @@ function label(node::Node)
     end
     return PythonCall.pyconvert(String, label, "")
 end
-function age(node::Node)
+function age(node::TreeNode)
     return PythonCall.pyconvert(Float64, node.data.age, 0)
 end
-function depth(node::Node)
+function depth(node::TreeNode)
     return PythonCall.pyconvert(Float64, node.data.depth, 0)
 end
 
-function coalescence_ages(node::Node)
+function coalescence_ages(node::TreeNode)
     node.data.resolve_node_ages()
     return sort([age(node) for nd in node.data.internal_nodes()])
 end
 
-function divergence_times(node::Node)
+function divergence_times(node::TreeNode)
     node.data.resolve_node_depths()
     return sort([depth(node) for nd in node.data.internal_nodes()])
 end

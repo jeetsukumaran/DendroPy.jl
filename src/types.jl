@@ -3,16 +3,15 @@ using AbstractTrees
 using PythonCall
 const WrappedPythonType = PythonCall.Core.Py
 
-struct Node{T<:WrappedPythonType}
+struct TreeNode{T<:WrappedPythonType}
+  tree::T
   data::T
-  children::Vector{Node{T}}
+  children::Vector{TreeNode{T}}
 end
 
-Node(data::T) where T = Node(data, Node{T}[])
-
-AbstractTrees.children(n::Node) = n.children
-AbstractTrees.printnode(io::IO, node::Node) = print(io, node.data)
-Base.show(io::IO, n::Node) = print(io, n.data)
+AbstractTrees.children(n::TreeNode) = n.children
+AbstractTrees.printnode(io::IO, node::TreeNode) = print(io, node.data)
+Base.show(io::IO, n::TreeNode) = print(io, n.data)
 
 # root = Node(1, [Node(2, [Node(5, [Node(9), Node(10)]), Node(6)]), Node(3)]);
 # print_tree(root)
