@@ -61,7 +61,12 @@ dendropy = () -> dendropy_ref[]
 #     return values(nd_ages)
 # end
 
-function enumerate_map_tree_source(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
+function enumerate_map_tree_source(
+    transform_fn::Function,
+    source::AbstractString,
+    source_type::AbstractString,
+    format::Symbol
+)
     dp = PythonCall.pyimport("dendropy")
     schema = String(format)
     trees = if source_type == "filepath"
@@ -76,7 +81,10 @@ function enumerate_map_tree_source(transform_fn::Function, source::AbstractStrin
     return [transform_fn(tree_idx, abstract_tree(tree)) for (tree_idx, tree) in enumerate(trees)]
 end
 
-function map_tree_source(transform_fn::Function, args...)
+function map_tree_source(
+    transform_fn::Function,
+    args...
+)
     return enumerate_map_tree_source( (tree_idx, tree) -> transform_fn(tree), args... )
 end
 
