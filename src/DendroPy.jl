@@ -29,7 +29,7 @@ function __init__()
     try
         copy!(dendropy, PyCall.pyimport("dendropy"))
     catch e
-        if isa(e, PyCall.PyError)
+        if true # isa(e, PyCall.PyError)
             @info "DendroPy package not found. Installing..."
             install_dendropy()
         else
