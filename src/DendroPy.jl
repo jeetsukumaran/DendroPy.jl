@@ -17,21 +17,22 @@ import Logging
 include("types.jl")
 
 # const dendropy = PyCall.PyNULL()
-const dendropy = Ref{PythonCall.Py}()
+const dendropy_ref = Ref{WrappedPythonType}()
 
 function install_dendropy()
     @info("Attempting to install DendroPy Python package from the development-main branch.")
     # Use Conda.jl or the user's existing Python environment to install DendroPy
     run(`pip install git+https://github.com/jeetsukumaran/DendroPy@development-main`)
     # copy!(dendropy, PyCall.pyimport("dendropy"))
-    dendropy[] = PythonCall.pyimport("dendropy")
+    dendropy_ref[] = PythonCall.pyimport("dendropy")
 end
 
 function __init__()
     try
-        dendropy[] = PythonCall.pyimport("dendropy")
+        dendropy_ref[] = PythonCall.pyimport("dendropy")
     catch e
-        if true # isa(e, PyCall.PyError)
+        # if true # isa(e, PyCall.PyError)
+        if true # isa(e, PythonCall.Core.PyException)
             @info "DendroPy package not found. Installing..."
             install_dendropy()
         else
@@ -39,6 +40,9 @@ function __init__()
         end
     end
 end
+
+dendropy = () -> dendropy_ref[]
+# dendropy = PythonCall.pyimport("dendropy")
 
 # function divergence_times_from_dendropy_tree(
 #     tree,
@@ -58,13 +62,14 @@ end
 # end
 
 function enumerate_map_tree_source(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
+    dp = PythonCall.pyimport("dendropy")
     schema = String(format)
     trees = if source_type == "filepath"
-        dendropy.TreeList.get(path=source, schema=schema, rooting="force-rooted")
+        dp.TreeList.get(path=source, schema=schema, rooting="force-rooted")
     elseif source_type == "file"
-        dendropy.TreeList.get(file=source, schema=schema, rooting="force-rooted")
+        dp.TreeList.get(file=source, schema=schema, rooting="force-rooted")
     elseif source_type == "string"
-        dendropy.TreeList.get(data=source, schema=schema, rooting="force-rooted")
+        dp.TreeList.get(data=source, schema=schema, rooting="force-rooted")
     else
         throw(ArgumentError("Invalid source_type: $source_type. Must be one of 'filepath', 'file', or 'string'."))
     end
@@ -76,7 +81,8 @@ function map_tree_source(transform_fn::Function, args...)
 end
 
 function abstract_tree(start_node::WrappedPythonType)
-    if haskey(start_node, :seed_node)
+    # # if haskey(start_node, :seed_node) # PyCall
+    if hasproperty(start_node, "seed_node")
         start_node = start_node.seed_node
     end
     abstract_node = Node(
@@ -114,7 +120,7 @@ function edge_length(node::Node)
     return node.data.edge.length
 end
 function label(node::Node)
-    return node.data.taxon === nothing ? node.data.label : node.data.taxon.label
+    return node.data.taxon == nothing ? node.data.label : node.data.taxon.label
 end
 function age(node::Node)
     return node.data.age
