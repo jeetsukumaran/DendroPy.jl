@@ -130,15 +130,18 @@ end
 function age(node::Node)
     return PythonCall.pyconvert(Float64, node.data.age, 0)
 end
-
-function coalescence_ages(tree::WrappedPythonType)
-    tree.resolve_node_ages()
-    return sort([nd.age for nd in tree.internal_nodes()])
+function depth(node::Node)
+    return PythonCall.pyconvert(Float64, node.data.depth, 0)
 end
 
-function divergence_times(tree::WrappedPythonType)
-    tree.resolve_node_depths()
-    return sort([nd.depth for nd in tree.internal_nodes()])
+function coalescence_ages(node::Node)
+    node.data.resolve_node_ages()
+    return sort([age(node) for nd in node.data.internal_nodes()])
+end
+
+function divergence_times(node::Node)
+    node.data.resolve_node_depths()
+    return sort([depth(node) for nd in node.data.internal_nodes()])
 end
 
 end
