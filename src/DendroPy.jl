@@ -136,13 +136,13 @@ function depth(node::TreeNode)
 end
 
 function coalescence_ages(node::TreeNode)
-    node.data.resolve_node_ages()
-    return sort([age(node) for nd in node.data.internal_nodes()])
+    node.tree.resolve_node_ages()
+    return sort([age(node) for nd in node.data.postorder_internal_node_iter()])
 end
 
 function divergence_times(node::TreeNode)
-    node.data.resolve_node_depths()
-    return sort([depth(node) for nd in node.data.internal_nodes()])
+    node.tree.resolve_node_depths()
+    return sort([depth(node) for nd in node.data.postorder_internal_node_iter()])
 end
 
 end
