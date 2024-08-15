@@ -11,23 +11,25 @@ export
     dendropy,
     install_dendropy
 
-import PyCall
+import PythonCall
 import Logging
 
 include("types.jl")
 
-const dendropy = PyCall.PyNULL()
+# const dendropy = PyCall.PyNULL()
+const dendropy = Ref{PythonCall.Py}()
 
 function install_dendropy()
     @info("Attempting to install DendroPy Python package from the development-main branch.")
     # Use Conda.jl or the user's existing Python environment to install DendroPy
     run(`pip install git+https://github.com/jeetsukumaran/DendroPy@development-main`)
-    copy!(dendropy, PyCall.pyimport("dendropy"))
+    # copy!(dendropy, PyCall.pyimport("dendropy"))
+    dendropy[] = PythonCall.pyimport("dendropy")
 end
 
 function __init__()
     try
-        copy!(dendropy, PyCall.pyimport("dendropy"))
+        dendropy[] = PythonCall.pyimport("dendropy")
     catch e
         if true # isa(e, PyCall.PyError)
             @info "DendroPy package not found. Installing..."
@@ -73,7 +75,7 @@ function map_tree_source(transform_fn::Function, args...)
     return enumerate_map_tree_source( (tree_idx, tree) -> transform_fn(tree), args... )
 end
 
-function abstract_tree(start_node::PyCall.PyObject)
+function abstract_tree(start_node::WrappedPythonType)
     if haskey(start_node, :seed_node)
         start_node = start_node.seed_node
     end
@@ -87,10 +89,10 @@ end
 function postorder_iter(start_node::Node)
     return AbstractTrees.PostOrderDFS(start_node)
 end
-function postorder_iter(tree::PyCall.PyObject)
+function postorder_iter(tree::WrappedPythonType)
     return postorder_iter(abstract_tree(tree))
 end
-function postorder_map(fn::Function, tree::PyCall.PyObject)
+function postorder_map(fn::Function, tree::WrappedPythonType)
     map(postorder_iter(abstract_tree(tree))) do node
         return fn(node)
     end
@@ -99,10 +101,10 @@ end
 function preorder_iter(start_node::Node)
     return AbstractTrees.PreOrderDFS(start_node)
 end
-function preorder_iter(tree::PyCall.PyObject)
+function preorder_iter(tree::WrappedPythonType)
     return preorder_iter(abstract_tree(tree))
 end
-function preorder_map(fn::Function, tree::PyCall.PyObject)
+function preorder_map(fn::Function, tree::WrappedPythonType)
     map(preorder_iter(abstract_tree(tree))) do node
         return fn(node)
     end
@@ -118,12 +120,12 @@ function age(node::Node)
     return node.data.age
 end
 
-function coalescence_ages(tree::PyCall.PyObject)
+function coalescence_ages(tree::WrappedPythonType)
     tree.resolve_node_ages()
     return sort([nd.age for nd in tree.internal_nodes()])
 end
 
-function divergence_times(tree::PyCall.PyObject)
+function divergence_times(tree::WrappedPythonType)
     tree.resolve_node_depths()
     return sort([nd.depth for nd in tree.internal_nodes()])
 end

@@ -1,7 +1,9 @@
 using AbstractTrees
-using PyCall
+# using PyCall
+using PythonCall
+const WrappedPythonType = PythonCall.Core.Py
 
-struct Node{T<:PyCall.PyObject}
+struct Node{T<:WrappedPythonType}
   data::T
   children::Vector{Node{T}}
 end
