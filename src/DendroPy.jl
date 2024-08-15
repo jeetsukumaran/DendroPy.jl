@@ -120,7 +120,12 @@ function edge_length(node::Node)
     return PythonCall.pyconvert(Float64, node.data.edge.length, 0)
 end
 function label(node::Node)
-    return PythonCall.pyconvert(String, node.data.taxon == nothing ? node.data.label : node.data.taxon.label, "")
+    if pytruth(node.data.taxon)
+        label = node.data.taxon.label
+    else
+        label = node.data.label
+    end
+    return PythonCall.pyconvert(String, label, "")
 end
 function age(node::Node)
     return PythonCall.pyconvert(Float64, node.data.age, 0)
