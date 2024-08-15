@@ -1,37 +1,59 @@
 module DendroPy
 
-export dendropy,
-    divergence_times_from_dendropy_tree
+export
+    postorder_iter,
+    postorder_map,
+    preorder_iter,
+    preorder_map,
+    enumerate_map_tree_source,
+    map_tree_source,
+    abstract_tree,
+    dendropy,
+    install_dendropy
 
 import PyCall
+import Pkg
 
 include("types.jl")
 
 const dendropy = PyCall.PyNULL()
 
-function __init__()
+function install_dendropy()
+    println("Attempting to install DendroPy Python package from the development-main branch.")
+    # Use Conda.jl or the user's existing Python environment to install DendroPy
+    run(`pip install git+https://github.com/jeetsukumaran/DendroPy@development-main`)
     copy!(dendropy, PyCall.pyimport("dendropy"))
 end
 
-function divergence_times_from_dendropy_tree(
-    tree,
-    is_include_leaves::Bool = false,
-)
-    nd_ages = Dict{typeof(tree.seed_node), Float64}()
-    # nd_ages = Dict{Int64, Float64}()
-    # nd_key = (nd) -> PyCall.py"""id($nd)"""
-    nd_key = (nd) -> nd
-    for cnd in tree.preorder_node_iter()
-        cnd_key = nd_key(cnd)
-        node_edge_length = (cnd.edge != nothing && cnd.edge.length != nothing) ? cnd.edge.length : 0.0
-        if (cnd.parent_node != nothing)
-        #     nd_ages[cnd_key] = nd_ages[nd_key(cnd.parent_node)] + node_edge_length
-        elseif (is_include_leaves || !cnd.is_leaf())
-            nd_ages[cnd_key] = node_edge_length
+function __init__()
+    try
+        copy!(dendropy, PyCall.pyimport("dendropy"))
+    catch e
+        if isa(e, PyCall.PyError)
+            println("DendroPy package not found. Installing...")
+            install_dendropy()
+        else
+            rethrow(e)
         end
     end
-    return values(nd_ages)
 end
+
+# function divergence_times_from_dendropy_tree(
+#     tree,
+#     is_include_leaves::Bool = false,
+# )
+#     nd_ages = Dict{typeof(tree.seed_node), Float64}()
+#     nd_key = (nd) -> nd
+#     for cnd in tree.preorder_node_iter()
+#         cnd_key = nd_key(cnd)
+#         node_edge_length = (cnd.edge != nothing && cnd.edge.length != nothing) ? cnd.edge.length : 0.0
+#         if (cnd.parent_node != nothing)
+#         elseif (is_include_leaves || !cnd.is_leaf())
+#             nd_ages[cnd_key] = node_edge_length
+#         end
+#     end
+#     return values(nd_ages)
+# end
 
 function enumerate_map_tree_source(transform_fn::Function, source::AbstractString, source_type::AbstractString, format::Symbol)
     schema = String(format)
@@ -106,12 +128,5 @@ function divergence_times(tree::PyCall.PyObject)
     return sort([nd.depth for nd in tree.internal_nodes()])
 end
 
-
-
-# function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
-# end
-
-# function abstract_trees_from_file(filepath::AbstractString, format::Symbol)
-# end
-
 end
+
