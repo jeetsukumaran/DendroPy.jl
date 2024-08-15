@@ -96,9 +96,6 @@ end
 function postorder_iter(start_node::TreeNode)
     return AbstractTrees.PostOrderDFS(start_node)
 end
-function postorder_iter(tree::WrappedPythonType)
-    return postorder_iter(abstract_tree(tree))
-end
 function postorder_map(fn::Function, start_node::TreeNode)
     map(postorder_iter(start_node)) do node
         return fn(node)
@@ -107,9 +104,6 @@ end
 
 function preorder_iter(start_node::TreeNode)
     return AbstractTrees.PreOrderDFS(start_node)
-end
-function preorder_iter(tree::WrappedPythonType)
-    return preorder_iter(abstract_tree(tree))
 end
 function preorder_map(fn::Function, start_node::TreeNode)
     map(preorder_iter(start_node)) do node
