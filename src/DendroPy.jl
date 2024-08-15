@@ -73,7 +73,7 @@ function enumerate_map_tree_source(transform_fn::Function, source::AbstractStrin
     else
         throw(ArgumentError("Invalid source_type: $source_type. Must be one of 'filepath', 'file', or 'string'."))
     end
-    return [transform_fn(tree_idx, tree) for (tree_idx, tree) in enumerate(trees)]
+    return [transform_fn(tree_idx, abstract_tree(tree)) for (tree_idx, tree) in enumerate(trees)]
 end
 
 function map_tree_source(transform_fn::Function, args...)
@@ -98,8 +98,8 @@ end
 function postorder_iter(tree::WrappedPythonType)
     return postorder_iter(abstract_tree(tree))
 end
-function postorder_map(fn::Function, tree::WrappedPythonType)
-    map(postorder_iter(abstract_tree(tree))) do node
+function postorder_map(fn::Function, start_node::Node)
+    map(postorder_iter(start_node)) do node
         return fn(node)
     end
 end
@@ -110,20 +110,20 @@ end
 function preorder_iter(tree::WrappedPythonType)
     return preorder_iter(abstract_tree(tree))
 end
-function preorder_map(fn::Function, tree::WrappedPythonType)
-    map(preorder_iter(abstract_tree(tree))) do node
+function preorder_map(fn::Function, start_node::Node)
+    map(preorder_iter(start_node)) do node
         return fn(node)
     end
 end
 
 function edge_length(node::Node)
-    return node.data.edge.length
+    return PythonCall.pyconvert(Float64, node.data.edge.length, 0)
 end
 function label(node::Node)
-    return node.data.taxon == nothing ? node.data.label : node.data.taxon.label
+    return PythonCall.pyconvert(String, node.data.taxon == nothing ? node.data.label : node.data.taxon.label, "")
 end
 function age(node::Node)
-    return node.data.age
+    return PythonCall.pyconvert(Float64, node.data.age, 0)
 end
 
 function coalescence_ages(tree::WrappedPythonType)

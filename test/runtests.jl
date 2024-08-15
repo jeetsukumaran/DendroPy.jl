@@ -49,6 +49,7 @@ function check_mapping_over_tree()
                 expected = test_tree_data["nodes"][fn_key][traversal_key]
                 result = iter_fn(apply_fn, tree)
                 @info result
+                @info typeof(result)
                 @test result == expected
             end
         end
