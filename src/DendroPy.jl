@@ -133,5 +133,7 @@ module DendroPy
         return sort(map(depth, filter(is_internal, collect(preorder_iter(tree_node)))))
     end
 
+    include("simulate.jl")
+
 end
 
