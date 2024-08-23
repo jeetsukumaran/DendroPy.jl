@@ -1,6 +1,6 @@
 name = "DendroPy"
 uuid = "54152803-fac3-4411-96b7-96525d0c3ab4"
-authors = ["Jeet Sukumaran <jeetsukumaran@gmail.com>"]
+authors = ["Jeet Sukumaran <jeetsukumaran@gmail.com>", "Matthew Andres Moreno <m.more500@gmail.com>"]
 version = "1.0.0-DEV"
 
 [deps]
