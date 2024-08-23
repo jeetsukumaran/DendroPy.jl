@@ -19,22 +19,21 @@ module DendroPy
     # const dendropy = PyCall.PyNULL()
     const dendropy_ref = Ref{WrappedPythonType}()
 
-    # function install_dendropy()
-    #     @info("Attempting to install DendroPy Python package from the development-main branch.")
-    #     # Use Conda.jl or the user's existing Python environment to install DendroPy
-    #     run(`pip install git+https://github.com/jeetsukumaran/DendroPy@development-main`)
-    #     # copy!(dendropy, PyCall.pyimport("dendropy"))
-    #     dendropy_ref[] = PythonCall.pyimport("dendropy")
-    # end
+    function install_dendropy()
+        @info("Attempting to install DendroPy Python package from the development-main branch.")
+        # Use Conda.jl or the user's existing Python environment to install DendroPy
+        run(`pip install git+https://github.com/jeetsukumaran/DendroPy@development-main`)
+        # copy!(dendropy, PyCall.pyimport("dendropy"))
+        dendropy_ref[] = PythonCall.pyimport("dendropy")
+    end
 
     function __init__()
         try
             dendropy_ref[] = PythonCall.pyimport("dendropy")
         catch e
-            # if true # isa(e, PyCall.PyError)
-            if true # isa(e, PythonCall.Core.PyException)
-                @info "DendroPy package not found. Installing..."
-                install_dendropy()
+            if isa(e, PythonCall.Core.PyException)
+                @error "Import of (Python) *DendroPy* failed. *DendroPy.jl* relies on *CondaPkg* processing of 'CondaPkg.toml' for Python environment management."
+                rethrow(e)
             else
                 rethrow(e)
             end
