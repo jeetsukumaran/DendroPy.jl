@@ -32,7 +32,7 @@ module DendroPy
             dendropy_ref[] = PythonCall.pyimport("dendropy")
         catch e
             if isa(e, PythonCall.Core.PyException)
-                @error "Import of (Python) *DendroPy* failed. *DendroPy.jl* relies on *CondaPkg* processing of 'CondaPkg.toml' for Python environment management."
+                @error "Import of *DendroPy* (Python package) failed. *DendroPy.jl* relies on *CondaPkg* processing of 'CondaPkg.toml' for Python package management."
                 rethrow(e)
             else
                 rethrow(e)
