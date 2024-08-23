@@ -8,8 +8,8 @@ module DendroPy
         enumerate_map_tree_source,
         map_tree_source,
         abstract_tree,
-        dendropy,
-        install_dendropy
+        dendropy
+        # install_dendropy
 
     import PythonCall
     import Logging
@@ -19,13 +19,13 @@ module DendroPy
     # const dendropy = PyCall.PyNULL()
     const dendropy_ref = Ref{WrappedPythonType}()
 
-    function install_dendropy()
-        @info("Attempting to install DendroPy Python package from the development-main branch.")
-        # Use Conda.jl or the user's existing Python environment to install DendroPy
-        run(`pip install git+https://github.com/jeetsukumaran/DendroPy@development-main`)
-        # copy!(dendropy, PyCall.pyimport("dendropy"))
-        dendropy_ref[] = PythonCall.pyimport("dendropy")
-    end
+    # function install_dendropy()
+    #     @info("Attempting to install DendroPy Python package from the development-main branch.")
+    #     # Use Conda.jl or the user's existing Python environment to install DendroPy
+    #     run(`pip install git+https://github.com/jeetsukumaran/DendroPy@development-main`)
+    #     # copy!(dendropy, PyCall.pyimport("dendropy"))
+    #     dendropy_ref[] = PythonCall.pyimport("dendropy")
+    # end
 
     function __init__()
         try
