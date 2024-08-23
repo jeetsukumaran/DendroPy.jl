@@ -13,7 +13,17 @@ function birth_death_coalescence_ages(
     ;
     kwargs...
 )
-    return DendroPy.coalescence_ages.(birth_death_trees(rng, n_leaves_fn, n_replicates; kwargs...))
+    treesim = PythonCall.pyimport("dendropy.simulate.treesim")
+    result = treesim.birthdeath_coalescence_ages(
+                                                 nothing,
+                                                 (rep_idx, rng) -> Dict("birth_rate" => 1.0,
+                                                                    "death_rate" => 0.0,
+                                                                    "num_extant_tips" => n_leaves_fn(),
+                                                                   ),
+                                                 n_replicates,
+                                                )
+    return result
+    # return DendroPy.coalescence_ages.(birth_death_trees(rng, n_leaves_fn, n_replicates; kwargs...))
 end
 
 function birth_death_divergence_times(
