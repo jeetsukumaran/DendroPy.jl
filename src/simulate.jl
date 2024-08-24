@@ -61,7 +61,7 @@ function birth_death_trees(
     tns = dp.TaxonNamespace()
     (birth_rate, kwargs) = pop_key(kwargs, :birth_rate, 1.0)
     (death_rate, kwargs) = pop_key(kwargs, :death_rate, 0.0)
-    n_leaves_per_tree = [ n_leaves_fn() for _ in 1:n_replicates ]
+    n_leaves_per_tree = [ n_leaves_fn(rep_idx, rng) for rep_idx in 1:n_replicates ]
     trees = []
     for n_leaves in n_leaves_per_tree
         dp_kwargs = copy(kwargs)
