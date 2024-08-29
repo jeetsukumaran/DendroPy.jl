@@ -1,9 +1,12 @@
 # DendroPy
 
+This is a Julia wrapper for [DendroPy](https://jeetsukumaran.github.io/DendroPy/).
+
+It is a pre-pre-pre-pre-alpha status :)
+
 <!-- [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://jeetsukumaran.github.io/DendroPy.jl/stable/) -->
 <!-- [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://jeetsukumaran.github.io/DendroPy.jl/dev/) -->
-[![Build Status](https://github.com/jeetsukumaran/DendroPy.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/jeetsukumaran/DendroPy.jl/actions/workflows/CI.yml?query=branch%3Amain)
-
+<!-- [![Build Status](https://github.com/jeetsukumaran/DendroPy.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/jeetsukumaran/DendroPy.jl/actions/workflows/CI.yml?query=branch%3Amain) -->
 
 ## Installation
 
