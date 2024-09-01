@@ -43,8 +43,8 @@ function birth_death_trees(
         if isa(death_rate, Function) || isa(death_rate, Type)
             death_rate = death_rate(rng)
         end
-        (num_extant_tips, kwargs) = pop_key(kwargs, :n_leaves, 10)
-        kwargs[:num_extant_tips] = num_extant_tips
+        # (num_extant_tips, kwargs) = pop_key(kwargs, :n_leaves, 10)
+        # kwargs[:num_extant_tips] = num_extant_tips
         tree = bd.birth_death_tree(
                 birth_rate,
                 death_rate,
@@ -57,10 +57,29 @@ function birth_death_trees(
     return trees
 end
 
-function birth_death_coalescent_trees(
+function birth_death_coalescent_tree_set(
     rng,
-    n_replicates,
-    ;
-    kwargs...
+    pop_tree::TreeNode,
+    sampling_params,
+    n_replicates = 1;
 )
+    results = []
+    for rep_idx in 1:n_replicates
+        kwargs = Dict{Symbol, Any}(rand(rng, sampling_params))
+    end
+    return results
+end
+
+function birth_death_coalescent_tree_sets(
+    rng,
+    coalescent_sampling_params,
+    structuring_sampling_params,
+    n_replicates = 1;
+)
+    results = []
+    structuring_trees = birth_death_trees(rng, structuring_sampling_params, n_replicates)
+    for rep_idx in 1:n_replicates
+        kwargs = Dict{Symbol, Any}(rand(rng, coalescent_sampling_params))
+    end
+    return results
 end
