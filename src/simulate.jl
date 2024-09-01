@@ -6,74 +6,61 @@ function pop_key(d, key, default)
     return value, popped_d
 end
 
-# function birth_death_coalescence_ages(
-#     rng,
-#     n_leaves_fn,
-#     n_replicates,
-#     ;
-#     kwargs...
-# )
-#     treesim = PythonCall.pyimport("dendropy.simulate.treesim")
-#     result = treesim.birthdeath_coalescence_ages(
-#                                                  nothing,
-#                                                  (rep_idx, rng) -> Dict("birth_rate" => 1.0,
-#                                                                     "death_rate" => 0.0,
-#                                                                     "num_extant_tips" => n_leaves_fn(),
-#                                                                    ),
-#                                                  # Dict("birth_rate" => 1.0,
-#                                                  #                    "death_rate" => 0.0,
-#                                                  #                    "num_extant_tips" => n_leaves_fn(),
-#                                                  #                   ),
-#                                                  n_replicates,
-#                                                 )
-#     return result
-# end
-
 function birth_death_coalescence_ages(
     rng,
-    n_leaves_fn,
+    sampling_params,
     n_replicates,
-    ;
-    kwargs...
 )
-    return DendroPy.coalescence_ages.(birth_death_trees(rng, n_leaves_fn, n_replicates; kwargs...))
+    return DendroPy.coalescence_ages.(birth_death_trees(rng, sampling_params, n_replicates))
 end
 
 function birth_death_divergence_times(
     rng,
-    n_leaves_fn,
+    sampling_params,
     n_replicates,
     ;
     kwargs...
 )
-    return DendroPy.divergence_times.(birth_death_trees(rng, n_leaves_fn, n_replicates; kwargs...))
+    return DendroPy.divergence_times.(birth_death_trees(rng, sampling_params, n_replicates))
 end
 
 function birth_death_trees(
     rng,
-    n_leaves_fn,
+    sampling_params,
     n_replicates,
-    ;
-    kwargs...
 )
     dp = PythonCall.pyimport("dendropy")
     bd = PythonCall.pyimport("dendropy.model.birthdeath")
     tns = dp.TaxonNamespace()
-    (birth_rate, kwargs) = pop_key(kwargs, :birth_rate, 1.0)
-    (death_rate, kwargs) = pop_key(kwargs, :death_rate, 0.0)
-    n_leaves_per_tree = [ n_leaves_fn(rep_idx, rng) for rep_idx in 1:n_replicates ]
     trees = []
-    for n_leaves in n_leaves_per_tree
-        dp_kwargs = copy(kwargs)
-        dp_kwargs[:num_extant_tips] = n_leaves
+    for rep_idx in 1:n_replicates
+        kwargs = Dict{Symbol, Any}(sampling_params)
+        (birth_rate, kwargs) = pop_key(kwargs, :birth_rate, 1.0)
+        if isa(birth_rate, Function) || isa(birth_rate, Type)
+            birth_rate = birth_rate(rng)
+        end
+        (death_rate, kwargs) = pop_key(kwargs, :death_rate, 0.0)
+        if isa(death_rate, Function) || isa(death_rate, Type)
+            death_rate = death_rate(rng)
+        end
+        (num_extant_tips, kwargs) = pop_key(kwargs, :n_leaves, 10)
+        kwargs[:num_extant_tips] = num_extant_tips
         tree = bd.birth_death_tree(
                 birth_rate,
                 death_rate,
                 ;
-                dp_kwargs...
+                kwargs...
         )
         tree = abstract_tree(tree)
         push!(trees, tree)
     end
     return trees
+end
+
+function birth_death_coalescent_trees(
+    rng,
+    n_replicates,
+    ;
+    kwargs...
+)
 end
