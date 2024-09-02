@@ -34,7 +34,6 @@ end
 function birth_death_trees(
     rng,
     sampling_params,
-    value_type::Type = TreeNode,
     n_replicates = 1,
     ;
     convert_fn = abstract_tree,
