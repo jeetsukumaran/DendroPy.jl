@@ -84,8 +84,9 @@ function birth_death_coalescent_tree_suites(
     structuring_trees = birth_death_trees(
         rng,
         structuring_sampling_params,
-        WrappedPythonType,
-        n_replicates,
+        n_replicates
+        ;
+        convert_fn=identity,
     )
     structured_trees = []
     for (st_tree_idx, structuring_tree) in enumerate(structuring_trees)
