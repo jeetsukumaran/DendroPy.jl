@@ -70,6 +70,7 @@ function birth_death_coalescent_tree_suites(
     structuring_sampling_params,
     structured_sampling_params,
     n_replicates = 1;
+    covert_fn = abstract_tree,
 )
     # dp_treesim = PythonCall.pyimport("dendropy.simulate.treesim")
     dp_coalescent = PythonCall.pyimport("dendropy.model.coalescent")
@@ -91,13 +92,19 @@ function birth_death_coalescent_tree_suites(
         results = []
         structured_tree_samples = []
         for coal_tree_idx in 1:pop!(kwargs, :n_trees_per_gene, 1)
-            (coal_pytree, pop_tree) = dp_coalescent.constrained_kingman_tree(
+            (coal_tree, pop_tree) = dp_coalescent.constrained_kingman_tree(
                     structuring_tree;
                     kwargs...
             )
-            push!(structured_tree_samples, coal_pytree)
+            if (covert_fn !== nothing)
+                coal_tree = covert_fn(coal_tree)
+            end
+            push!(structured_tree_samples, coal_tree)
         end
         push!(structured_trees, structured_tree_samples)
+    end
+    if covert_fn !== nothing
+        structuring_trees = [covert_fn(st) for st in structuring_trees]
     end
     return [
         structuring_trees,
