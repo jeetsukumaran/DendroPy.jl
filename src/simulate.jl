@@ -11,7 +11,11 @@ function birth_death_coalescence_ages(
     sampling_params,
     n_replicates,
 )
-    return DendroPy.coalescence_ages.(birth_death_trees(rng, sampling_params, n_replicates))
+    return DendroPy.coalescence_ages.(birth_death_trees(
+        rng,
+        sampling_params,
+        n_replicates
+    ))
 end
 
 function birth_death_divergence_times(
@@ -19,9 +23,12 @@ function birth_death_divergence_times(
     sampling_params,
     n_replicates,
     ;
-    kwargs...
 )
-    return DendroPy.divergence_times.(birth_death_trees(rng, sampling_params, n_replicates))
+    return DendroPy.divergence_times.(birth_death_trees(
+        rng,
+        sampling_params,
+        n_replicates
+    ))
 end
 
 function birth_death_trees(
@@ -30,6 +37,7 @@ function birth_death_trees(
     value_type::Type = TreeNode,
     n_replicates = 1,
     ;
+    convert_fn = abstract_tree,
 )
     dp = PythonCall.pyimport("dendropy")
     bd = PythonCall.pyimport("dendropy.model.birthdeath")
@@ -53,13 +61,7 @@ function birth_death_trees(
                 ;
                 kwargs...
         )
-        if (value_type === WrappedPythonType)
-            # do not convert
-        elseif (value_type === AbstractTree || value_type === TreeNode)
-            tree = abstract_tree(tree)
-        else
-            throw(ArgumentError("Unsupported 'value_type': $(value_type)"))
-        end
+        tree = convert_fn(tree)
         push!(trees, tree)
     end
     return trees
@@ -96,16 +98,12 @@ function birth_death_coalescent_tree_suites(
                     structuring_tree;
                     kwargs...
             )
-            if (convert_fn !== nothing)
-                coal_tree = convert_fn(coal_tree)
-            end
+            coal_tree = convert_fn(coal_tree)
             push!(structured_tree_samples, coal_tree)
         end
         push!(structured_trees, structured_tree_samples)
     end
-    if convert_fn !== nothing
-        structuring_trees = [convert_fn(st) for st in structuring_trees]
-    end
+    structuring_trees = [convert_fn(st) for st in structuring_trees]
     return [
         structuring_trees,
         structured_trees,
