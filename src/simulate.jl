@@ -27,7 +27,9 @@ end
 function birth_death_trees(
     rng,
     sampling_params,
-    n_replicates,
+    value_type::Type = TreeNode,
+    n_replicates = 1,
+    ;
 )
     dp = PythonCall.pyimport("dendropy")
     bd = PythonCall.pyimport("dendropy.model.birthdeath")
@@ -51,7 +53,13 @@ function birth_death_trees(
                 ;
                 kwargs...
         )
-        tree = abstract_tree(tree)
+        if (value_type === WrappedPythonType)
+            # do not convert
+        elseif (value_type === AbstractTree || value_type === TreeNode)
+            tree = abstract_tree(tree)
+        else
+            throw(ArgumentError("Unsupported 'value_type': $(value_type)"))
+        end
         push!(trees, tree)
     end
     return trees
@@ -76,10 +84,29 @@ function birth_death_coalescent_tree_sets(
     structuring_sampling_params,
     n_replicates = 1;
 )
+    # dp_treesim = PythonCall.pyimport("dendropy.simulate.treesim")
+    dp_coalescent = PythonCall.pyimport("dendropy.model.coalescent")
     results = []
-    structuring_trees = birth_death_trees(rng, structuring_sampling_params, n_replicates)
-    for rep_idx in 1:n_replicates
+    # structuring_trees = [wt.data for wt in birth_death_trees(
+    #     rng,
+    #     structuring_sampling_params,
+    #     WrappedPythonType,
+    #     n_replicates,
+    # )]
+    structuring_trees = birth_death_trees(
+        rng,
+        structuring_sampling_params,
+        WrappedPythonType,
+        n_replicates,
+    )
+    for (st_tree_idx, structuring_tree) in enumerate(structuring_trees)
         kwargs = Dict{Symbol, Any}(rand(rng, coalescent_sampling_params))
+        for coal_tree_idx in 1:pop!(kwargs, :n_trees_per_gene, 1)
+            (coal_pytree, pop_tree) = dp_coalescent.constrained_kingman_tree(
+                    structuring_tree,
+                    kwargs...
+            )
+        end
     end
     return results
 end
