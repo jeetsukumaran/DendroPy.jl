@@ -103,7 +103,7 @@ function birth_death_coalescent_tree_sets(
         kwargs = Dict{Symbol, Any}(rand(rng, coalescent_sampling_params))
         for coal_tree_idx in 1:pop!(kwargs, :n_trees_per_gene, 1)
             (coal_pytree, pop_tree) = dp_coalescent.constrained_kingman_tree(
-                    structuring_tree,
+                    structuring_tree;
                     kwargs...
             )
         end
