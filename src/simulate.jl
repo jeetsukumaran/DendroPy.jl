@@ -88,10 +88,9 @@ function birth_death_coalescent_tree_suites(
         ;
         convert_fn=identity,
     )
-    structured_trees = []
+    results = []
     for (st_tree_idx, structuring_tree) in enumerate(structuring_trees)
         kwargs = Dict{Symbol, Any}(rand(rng, structured_sampling_params))
-        results = []
         structured_tree_samples = []
         for coal_tree_idx in 1:pop!(kwargs, :n_trees_per_gene, 1)
             (coal_tree, pop_tree) = dp_coalescent.constrained_kingman_tree(
@@ -101,11 +100,7 @@ function birth_death_coalescent_tree_suites(
             coal_tree = convert_fn(coal_tree)
             push!(structured_tree_samples, coal_tree)
         end
-        push!(structured_trees, structured_tree_samples)
+        push!(results, convert_fn(structuring_tree) => structured_tree_samples)
     end
-    structuring_trees = [convert_fn(st) for st in structuring_trees]
-    return [
-        structuring_trees,
-        structured_trees,
-    ]
+    return results
 end
