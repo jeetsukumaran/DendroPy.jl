@@ -1,7 +1,7 @@
 name = "DendroPy"
 uuid = "54152803-fac3-4411-96b7-96525d0c3ab4"
-authors = ["Jeet Sukumaran <jeetsukumaran@gmail.com>", "Matthew Andres Moreno <m.more500@gmail.com>"]
 version = "1.0.0-DEV"
+authors = ["Jeet Sukumaran <jeetsukumaran@gmail.com>", "Matthew Andres Moreno <m.more500@gmail.com>"]
 
 [deps]
 AbstractTrees = "1520ce14-60c1-5f80-bbc7-55ef81b5835c"
@@ -14,7 +14,7 @@ Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 PythonCall = "6099a3de-0909-46bc-b1f4-468b9a2dfc0d"
 
 [compat]
-JSON = "0.21"
+JSON = "0.21, 1"
 julia = "1.8"
 
 [extras]
